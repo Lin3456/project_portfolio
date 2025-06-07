@@ -1,0 +1,21 @@
+html, body, #app {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+  
+/** 大螢幕 - MENU */
+.sidebar {
+	width: 220px;
+	height: 100vh;
+	top: 0; left: 0;
+	background-color: #1e1e2f;
+	padding-top: 1rem;
+	transition: transform 0.3s ease;
+}
+
+/* 小螢幕隱藏 sidebar 預設 */
+.sidebar-collapse {
+	transform: translateX(-100%);
+}
