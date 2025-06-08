@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import path from 'path';
 
 export default defineConfig({
+  base: '/project_portfolio/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'), // 讓 @ 指向 src 資料夾
