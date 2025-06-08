@@ -35,12 +35,6 @@
 						{{ route.meta.title || route.name }}
 					</div>
 				</template>
-
-        <!-- <MenuItem
-          v-if="route.children && route.children.length"
-          :data="route.children"
-          @close="$emit('close')"
-        /> -->
       </div>
     </div>
   </div>
@@ -121,6 +115,7 @@ export default {
   /* 展開時轉回正常方向「v」 */
   transform: rotate(90deg);
 	font-size: 18px;
+  margin-top: 10px;
 }
 
 </style>

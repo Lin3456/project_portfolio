@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<nav class="navbar navbar-expand-lg shadow-sm">
+		<nav class="navbar navbar-expand-lg shadow-sm bg-white">
 			<div class="d-flex align-items-center">
 				<div>
 					<button class="icon-button text-primary" @click="handleMenu">
@@ -35,8 +35,12 @@ export default {
 	data() {
 		return {
 			showMenu: false,
-			routers: routes
 		};
+	},
+	computed: {
+		routers() {
+			return routes.filter((route) => route.name);
+		}
 	},
 	components: {
 		MenuItem,
@@ -95,14 +99,20 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;           /* 滿高 */
-  width: 33.3333vw;        /* 畫面寬度的三分之一 */
+  height: 100vh;
+  width: 33.3333vw;
+	padding-top: 1rem;
   background-color: #3b3b59;
 	color: white;
   box-shadow: 2px 0 5px rgba(0,0,0,0.3);
   z-index: 1000;
 	font-size: 20px;
 	overflow-y: hidden;
+}
+
+/* 小螢幕隱藏 sidebar 預設 */
+.sidebar-collapse {
+	transform: translateX(-100%);
 }
 
 /* slide 進出動畫 */

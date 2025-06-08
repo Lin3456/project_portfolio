@@ -1,48 +1,27 @@
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('@/views/home.vue'),
-    meta: { title: '首頁' },
+    redirect: '/resume'
   },
   {
-    path: '/about',
-    name: 'About',
+    path: '/resume',
+    name: 'resume',
+    meta: { title: '履歷表' },
+    component: () => import('@/views/content/resume/index.vue'),
+  },
+  {
+    path: '/sample',
+    name: 'sample',
+    meta: { title: '履歷表_範本' },
+    component: () => import('@/views/content/resume/sample.vue'),
+  },
+  {
+    path: '/Portfolio',
+    name: 'Portfolio',
     // component: About,
-    meta: { title: '關於我們', hidden: false },
+    meta: { title: '作品集', hidden: false },
     children: [
-      {
-        path: 'team',
-        name: 'Team',
-        // component: Team,
-        meta: { title: '團隊介紹' },
-      },
-      {
-        path: 'history',
-        name: 'History',
-        // component: History,
-        meta: { title: '公司歷史' },
-      },
-    ],
-  },
-  {
-    path: '/contact',
-    name: 'Contact',
-    // component: Contact,
-    meta: { title: '聯絡我們', hidden: false },
-    children: [
-      {
-        path: 'email',
-        name: 'Email',
-        // component: Email,
-        meta: { title: '電子郵件' },
-      },
-      {
-        path: 'phone',
-        name: 'Phone',
-        // component: Phone,
-        meta: { title: '電話' },
-      },
+      
     ],
   },
 ]
