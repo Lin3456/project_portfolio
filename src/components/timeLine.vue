@@ -13,9 +13,7 @@
 
       <!-- 右側內容 -->
       <div class="timeline-content">
-        <p class="title">{{ item.title }} ({{ item.time }})</p>
-        <p class="secound-title">{{ item.secoundTitle }}</p>
-        <p class="content">{{ item.description }}</p>
+        <slot></slot>
       </div>
     </div>
   </div>

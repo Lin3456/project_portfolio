@@ -1,25 +1,25 @@
 const routes = [
   {
     path: '/',
-    redirect: '/resume'
+    redirect: '/home',
+  },
+  {
+    path: '/home',
+    name: 'home',
+    meta: {title: '首頁'},
+    component: () => import('@/views/content/home.vue'),
   },
   {
     path: '/resume',
     name: 'resume',
-    meta: { title: '履歷表' },
+    meta: {title: '履歷表'},
     component: () => import('@/views/content/resume/index.vue'),
-  },
-  {
-    path: '/sample',
-    name: 'sample',
-    meta: { title: '履歷表_範本' },
-    component: () => import('@/views/content/resume/sample.vue'),
   },
   {
     path: '/Portfolio',
     name: 'Portfolio',
     // component: About,
-    meta: { title: '作品集', hidden: false },
+    meta: {title: '作品集', hidden: false},
     children: [
       
     ],

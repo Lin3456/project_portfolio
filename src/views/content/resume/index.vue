@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid bg-light min-vh-100 p-4">
+  <div class="container-fluid">
     <div class="row shadow-lg bg-white rounded overflow-hidden">
       <!-- Left Column -->
       <div class="col left-col text-white p-4"  style="flex-basis: 27%; max-width: 27%;">
