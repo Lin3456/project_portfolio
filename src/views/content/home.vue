@@ -14,8 +14,8 @@
       <div
         class="text-start position-absolute start-0 bottom-0 p-4"
       >
-        <h1 class="display-4 Edu">林柔妤</h1>
-        <h2 class="h5 self-intro">前端工程師 | 以業務邏輯為核心的前端開發者</h2>
+        <h1 class="display-4">{{profile.info.name}}</h1>
+        <h2 class="h5">{{ `${profile.info.title} | ${profile.info.summary}` }}</h2>
         <div class="d-flex justify-content-between align-items-center" style="max-width: 4em">
           <a>
             <i class="fa-brands fa-github fa-2x"></i>
@@ -31,66 +31,40 @@
       </div>
     </section>
 
-    <!-- 個介 -->
+    <!-- 技能 -->
     <section class="container py-5">
-      <h3 class="fw-bold mb-4 title">個人簡介</h3>
-      <div class="row align-items-start">
-        <div class="col-12 col-md-3 d-flex justify-content-center mb-4 mb-md-0">
-          <img
-            src="@/assets/大頭照.jpg"
-            alt="個人照片"
-            class="img-fluid rounded-circle"
-            style="max-width: 200px;"
-          />
-        </div>
-
-        <!-- 右側文字 -->
-        <div class="col-12 col-md-9">
-          <p>
-            具備 3 ~ 4 年前端開發經驗，熟悉 JavaScript 與 Vue 框架，曾參與企業內部系統的規劃與建置，
-            後期於主管要求下接觸後端，逐步獨立完成中小型系統的全端功能。
-          </p>
-          <p>
-            開發風格著重功能正確與實用性，能快速理解業務需求並落實成系統邏輯，
-            適應力強、願意持續補強 UI/UX 與團隊協作的能力。
-          </p>
-          <p><strong>專長：</strong>Vue.js / Bootstrap / REST API 整合 / JavaScript</p>
-          <p>
-            <strong>職涯目標：</strong><br>
-            期望持續深化前端技術，補強畫面細節與互動體驗設計能力，並在有需要時支援後端邏輯開發。
-            希望成為能理解業務、掌握技術、解決問題的實用型前端工程師。
-          </p>
-        </div>
+      <h3 class="fw-bold mb-4 title h4">技能摘要</h3>
+      <div>
+        <span>前端技術:</span>
+        <Tag :data="profile.skills.frontEnd"/>
+        <p></p>
+        <span>後端技術(輔助能力):</span>
+        <Tag :data="profile.skills.backEnd"/>
       </div>
     </section>
 
     <!-- 專案 -->
     <section class="bg-light py-5">
       <div class="container">
-        <h3 class="fw-bold mb-4 title">專案經驗</h3>
+        <h3 class="fw-bold mb-4 title">專案經歷</h3>
 
-        <div class="mb-4">
-          <h5 class="fw-bold">資安管理系統</h5>
-          <p><strong>任職角色：</strong>前端開發</p>
-          <p><strong>技術：</strong>Vue 2、JavaScript</p>
-          <p>用途：供內部處理 資安管理系統。</p>
-          <p>職責：負責實作前端介面功能、維護使用流程的穩定性。</p>
-        </div>
-
-        <div class="mb-4">
-          <h5 class="fw-bold">帳務系統</h5>
-          <p><strong>任職角色：</strong>前後端開發（全端實作）</p>
-          <p><strong>技術：</strong>Vue 3、Bootstrap、JavaScript、Node.js、MariaDB</p>
-          <p>用途: 內部專用的 國內、外結帳系統</p>
-          <p>
-            職責：獨立建置前後端資料流，設計使用者列表與查詢介面，撰寫後端 API 與基本權限控管邏輯。
-          </p>
+        <div class="card mb-4" v-for="(item, index) in profile.experience" :key="`card-${index}`">
+          <div class="card-body">
+            <h5 class="card-title">{{ `${item.company} (${item.time})` }}</h5>
+            <h5>{{item.position}}</h5>
+            <p v-if="item.description">{{item.description}}</p>
+            <div class="card" v-for="(porject, index) in item.porject" :key="`childCard-${index}`">
+              <details>
+                <summary>{{porject.name}}</summary>
+              </details>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- 作品 -->
-    <section class="container py-5">
+    <!-- <section class="container py-5">
       <h3 class="fw-bold mb-4">作品展示</h3>
       <div class="row row-cols-1 row-cols-md-2 g-4">
         <div class="col" v-for="(work, index) in works" :key="index">
@@ -102,7 +76,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
 
     <button
       v-show="showTop"
@@ -116,18 +90,14 @@
 
 <script>
 import bg from '@/assets/image.jpg';
+import profile from './resume/profile.js';
 
 export default {
   name: 'home',
   data() {
     return {
-      works: [
-        {
-          title: 'ToDoList',
-          description: '待辦事項清單'
-        }
-      ],
       bg,
+      profile,
       showTop: false,
     };
   },
@@ -150,7 +120,7 @@ export default {
 
 <style scoped>
   .title {
-    font-size: 1.7em;
+    font-size: 3em;
     color: #19488f;
     font-family: 'DFKai-SB', '標楷體', serif;
     border-bottom: 1.7px solid #2471e5;
