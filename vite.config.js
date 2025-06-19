@@ -3,8 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import path from 'path';
 
 export default defineConfig({
-  // base: '/project_portfolio/', github page 專用
-  base: '/', // 開發用
+  base: process.env.VITE_BASE,
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'), // 讓 @ 指向 src 資料夾

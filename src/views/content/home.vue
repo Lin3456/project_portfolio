@@ -56,7 +56,7 @@
         v-for="(item, index) in profile.experience"
         :key="`card-${index}`"
       >
-        <div class="card-body">
+        <div class="card-body" style="white-space: pre-line;">
           <h5 class="card-title">{{ `${item.company} (${item.time})` }}</h5>
           <p style="font-size: 1rem;">{{ item.position }}</p>
           <p v-if="item.description" style="margin-left: 1rem">{{ item.description }}</p>
@@ -80,18 +80,18 @@
             </div>
             <div v-show="isExpanded(index, pIndex)" class="collapse-content">
               <div class="card-body" style="white-space: pre-line;">
-                <div>
+                <span>
                   <strong>專案簡介:</strong><br>
                   {{ project.introduction }}
-                </div>
-                <div v-if="project.curSituation">
+                </span><br>
+                <span v-if="project.curSituation">
                   <strong>當前狀態:</strong><br>
                   {{ project.curSituation }}
-                </div>
-                <div>
+                </span><br>
+                <span>
                   <strong>工作內容:</strong><br>
                   {{ project.job }}
-                </div>
+                </span>
 
                 <div class="mt-2" v-if="project.skills.frontEnd">
                   <strong>前端技術:</strong>

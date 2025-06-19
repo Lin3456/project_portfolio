@@ -1,9 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routers'
+
+const PROD = process.env.NODE_ENV === 'production';
 
 const router = createRouter({
   routes,
-  history: createWebHistory()
+  history: PROD ? createWebHashHistory() : createWebHistory(),
 })
 
 router.beforeEach((to, from, next) => {

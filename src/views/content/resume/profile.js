@@ -66,7 +66,7 @@ const profile = {
 					name: 'SRM 資安風險管理平台(Security Risk Management)',
 					introduction: '企業資安平台，整合資產弱點、通報與修補追蹤等機制',
 					curSituation: '',
-					job: '1. 負責既有系統功能維護與小型模組開發\n 2. 優化部分使用者介面，改善查詢與表單操作體驗',
+					job: '1. 負責既有系統功能維護與小型模組開發\n 2. 優化部分使用者介面，改善查詢與表單操作體驗。',
 					skills: {
 						frontEnd: [
 							{label: 'Vue 2'},
@@ -83,13 +83,13 @@ const profile = {
 			company: '康和綜合證券股份有限公司',
 			position: '全端工程師 | 正職',
 			time: '2023.08 - 2025.06',
-			description: '參與公司 COBOL 舊系統現在化重構專案，負責桌面應用與Web系統的前後端開發，提升操作體驗與維護彈性。\n具備從資料規劃、API設計、前端UI 建置到資料庫查詢邏輯整合的實務經驗',
+			description: '參與公司 COBOL 舊系統現代化重構專案，負責桌面應用與Web系統的前後端開發，提升操作體驗與維護彈性。\n具備從資料規劃、API設計、前端UI 建置到資料庫查詢邏輯整合的實務經驗。',
 			project: [
 				{
 					name: '國內外帳務管理系統(Electron 桌面應用)',
 					introduction: 'COBOL 舊有帳務系統改寫為桌面應用程式，供各部門查詢帳務資料、生成報表等。',
-					curSituation: '國外模組:已於2025年1月 全面上線。\n國內模組:目前已上線部分查詢與報表功能，但因應長官策略調整，暫停開發',
-					job: '使用VUE 3 + Electron開發多夜市查詢介面、資料檢索與匯出報表功能\n建立跨業元件模組，提升元件重用性與維護效率\n使用Node.js + JavaScript 撰寫API，整合Sequelize與MariaDB，負責帳務資料查詢與轉換業務邏輯',
+					curSituation: '國外模組:已於2025年1月 全面上線。\n國內模組:目前已上線部分查詢與報表功能，但因應長官策略調整，暫停開發。',
+					job: '使用Vue 3 + Electron開發查詢介面、資料檢索與匯出報表等功能。\n使用Node.js + JavaScript 撰寫API，整合Sequelize與MariaDB，負責帳務資料查詢與轉換業務邏輯。',
 					skills: {
 						frontEnd: [
 							{label: 'Electron'},
@@ -108,9 +108,9 @@ const profile = {
 				},
 				{
 					name: '分戶帳2.0 (Web 應用 | 開發中)',
-					introduction: '為 COBOL 系統現在化重構的專案，從零開發 Web 化分戶帳管理系統，並參與初期資料結構設計與規劃',
-					curSituation: '已完成查詢、維運介面 等部分功能，持續開發中',
-					job: '從系統規劃初期即參與資料結構設計、功能規劃與撰寫規格書 等\n使用 Vue 3 + Bootstrap5 開發 SPA前端介面\n 使用Node.js + JavaScript 撰寫 API，使用Sequelize連接 MariaDB，負責資料查詢、錯誤處理與格式驗證',
+					introduction: '為 COBOL 系統現在化重構的專案，從零開發 Web 化分戶帳管理系統，並參與初期資料結構設計與規劃。',
+					curSituation: '已完成查詢、維運介面 等部分功能，持續開發中。',
+					job: '從系統規劃初期即參與資料結構設計、功能規劃與撰寫規格書 等。\n使用 Vue 3 + Bootstrap5 開發 SPA前端介面。\n 使用Node.js + JavaScript 撰寫 API，使用Sequelize連接 MariaDB，負責資料查詢、錯誤處理與格式驗證。',
 					skills: {
 						frontEnd: [
 							{label: 'Vue 3'},
