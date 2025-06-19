@@ -41,9 +41,10 @@ p {
 	font-size: 18px;
 	padding: 4px 10px;
 	border-radius: 12px;
-	background-color: #f0f0f0;
+	background-color: #dcf1e7;
 	display: inline-block;
 	margin: 2px 4px;
+	font-family: 'Times New Roman', serif;
 }
 
 /* 字體縮放 */
@@ -69,4 +70,17 @@ p {
 		font-size: 13px;
 		padding: 3px 8px;
 	}
+}
+
+/* 文字字體 */
+.self-PMingLiU {
+  font-family: 'PMingLiU', '新細明體', serif;
+}
+
+.self-DFKai {
+	font-family: 'DFKai-SB', '標楷體', serif;
+}
+
+.self-times {
+	font-family: 'Times New Roman', serif;
 }

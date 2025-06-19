@@ -2,62 +2,120 @@
   <div>
     <!-- 背景 -->
     <section
-      class="text-black text-center position-relative"
+      class="text-dark text-center position-relative"
       :style="{
-        backgroundImage: `url(${bg})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundImage: `url(/src/assets/background.png), linear-gradient(to right, rgb(223 255 238), rgb(145 241 170))`,
+        backgroundSize: 'auto 100%',
+        backgroundPosition: 'right bottom',
         backgroundRepeat: 'no-repeat',
-        height: '70vh'
+        height: '70vh',
       }"
     >
       <div
-        class="text-start position-absolute start-0 bottom-0 p-4"
+        class="text-start position-absolute start-0 p-4"
+        :style="{top: '60%', transform: 'translateY(-40%)'}"
       >
-        <h1 class="display-4">{{profile.info.name}}</h1>
-        <h2 class="h5">{{ `${profile.info.title} | ${profile.info.summary}` }}</h2>
-        <div class="d-flex justify-content-between align-items-center" style="max-width: 4em">
-          <a>
+        <p class="h2 self-DFKai">{{ profile.info.name }}</p>
+        <p class="self-PMingLiU" style="font-size:25px">
+          {{ `${profile.info.title} | ${profile.info.summary}` }}
+        </p>
+        <div
+          class="d-flex justify-content-between align-items-center"
+          style="max-width: 4em"
+        >
+          <a :href="profile.info.github" target="_blank" style="color: #181717">
             <i class="fa-brands fa-github fa-2x"></i>
           </a>
           <a
             href="/files/resume.pdf"
             download="林柔妤_履歷表.pdf"
-            class="text-black"
           >
-            <i class="fa-solid fa-file-arrow-down fa-2x"></i>
+            <i class="fas fa-file-pdf fa-2x text-dark ms-3"></i>
           </a>
         </div>
       </div>
     </section>
 
     <!-- 技能 -->
-    <section class="container py-5">
-      <h3 class="fw-bold mb-4 title h4">技能摘要</h3>
+    <section class="container-fluid px-4 py-2">
+      <p class="fw-bold mb-4 title">技能摘要</p>
       <div>
         <span>前端技術:</span>
-        <Tag :data="profile.skills.frontEnd"/>
+        <Tag :data="profile.skills.frontEnd" />
         <p></p>
         <span>後端技術(輔助能力):</span>
-        <Tag :data="profile.skills.backEnd"/>
+        <Tag :data="profile.skills.backEnd" />
       </div>
     </section>
 
-    <!-- 專案 -->
-    <section class="bg-light py-5">
-      <div class="container">
-        <h3 class="fw-bold mb-4 title">專案經歷</h3>
+    <!-- 工作 -->
+    <section class="bg-light container-fluid px-4 py-2 position-relative">
+      <p class="fw-bold mb-4 title">工作經歷</p>
+      <div
+        class="card mb-4"
+        v-for="(item, index) in profile.experience"
+        :key="`card-${index}`"
+      >
+        <div class="card-body">
+          <h5 class="card-title">{{ `${item.company} (${item.time})` }}</h5>
+          <p style="font-size: 1rem;">{{ item.position }}</p>
+          <p v-if="item.description" style="margin-left: 1rem">{{ item.description }}</p>
 
-        <div class="card mb-4" v-for="(item, index) in profile.experience" :key="`card-${index}`">
-          <div class="card-body">
-            <h5 class="card-title">{{ `${item.company} (${item.time})` }}</h5>
-            <h5>{{item.position}}</h5>
-            <p v-if="item.description">{{item.description}}</p>
-            <div class="card" v-for="(porject, index) in item.porject" :key="`childCard-${index}`">
-              <details>
-                <summary>{{porject.name}}</summary>
-              </details>
+          <div
+            class="card mb-2"
+            v-for="(project, pIndex) in item.project"
+            :key="`childCard-${pIndex}`"
+          >
+            <div
+              class="card-header d-flex justify-content-between align-items-center"
+              role="button"
+              @click="toggleCollapse(index, pIndex)"
+            >
+              {{ project.name }}
+              <i
+                class="fa-solid fa-chevron-down arrow"
+                :class="{ rotated: isExpanded(index, pIndex) }"
+                aria-hidden="true"
+              />
             </div>
+            <div v-show="isExpanded(index, pIndex)" class="collapse-content">
+              <div class="card-body" style="white-space: pre-line;">
+                <div>
+                  <strong>專案簡介:</strong><br>
+                  {{ project.introduction }}
+                </div>
+                <div v-if="project.curSituation">
+                  <strong>當前狀態:</strong><br>
+                  {{ project.curSituation }}
+                </div>
+                <div>
+                  <strong>工作內容:</strong><br>
+                  {{ project.job }}
+                </div>
+
+                <div class="mt-2" v-if="project.skills.frontEnd">
+                  <strong>前端技術:</strong>
+                  <Tag :data="project.skills.frontEnd" />
+                </div>
+
+                <div class="mt-2" v-if="project.skills.backEnd">
+                  <strong>後端技術:</strong>
+                  <Tag :data="project.skills.backEnd" />
+                </div>
+              </div>
+            </div>
+            <img
+              v-if="index === 0 && isExpanded(index, pIndex)"
+              src="@/assets/cybersecurity.png"
+              alt="report"
+              class="bg-deco position-absolute"
+            />
+            <img
+              v-if="index === 1 && pIndex === 0 && isExpanded(index, pIndex)"
+              src="@/assets/report-analysis.png"
+              alt="report"
+              class="bg-deco position-absolute"
+            />
           </div>
         </div>
       </div>
@@ -65,7 +123,7 @@
 
     <!-- 作品 -->
     <!-- <section class="container py-5">
-      <h3 class="fw-bold mb-4">作品展示</h3>
+      <p class="fw-bold mb-4">作品展示</p>
       <div class="row row-cols-1 row-cols-md-2 g-4">
         <div class="col" v-for="(work, index) in works" :key="index">
           <div class="card h-100">
@@ -78,6 +136,27 @@
       </div>
     </section> -->
 
+    <footer class="bg-dark text-white py-3 self-times">
+      <div class="row container">
+        <div class="col-3"></div>
+        <div class="col-4 d-flex align-items-center">
+          <ul class="list-unstyled">
+            <li>
+              <i class="fa-solid fa-phone me-2"></i>
+              {{profile.info.contact.phone}}
+            </li>
+            <li>
+              <i class="fa-solid fa-envelope me-2"></i>
+              {{profile.info.contact.email}}
+            </li>
+          </ul>
+        </div>
+        <div class="col-4 d-flex align-items-center">
+          <!-- <p class="mb-1">© 2025 林柔妤 All rights reserved.</p> -->
+        </div>
+      </div>
+    </footer>
+
     <button
       v-show="showTop"
       @click="scrollToTop"
@@ -89,41 +168,54 @@
 </template>
 
 <script>
-import bg from '@/assets/image.jpg';
-import profile from './resume/profile.js';
+  import bg from '@/assets/background.png';
+  import profile from './resume/profile.js';
 
-export default {
-  name: 'home',
-  data() {
-    return {
-      bg,
-      profile,
-      showTop: false,
-    };
-  },
-  methods: {
-    handleScroll() {
-      this.showTop = window.scrollY > 300;
+  export default {
+    name: 'home',
+    data() {
+      return {
+        bg,
+        profile,
+        showTop: false,
+        expandedItems: [],
+      };
     },
-    scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    methods: {
+      handleScroll() {
+        this.showTop = window.scrollY > 300;
+      },
+      scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+      toggleCollapse(index, pIndex) {
+        const key = `${index}-${pIndex}`;
+        if (this.expandedItems.includes(key)) {
+          this.expandedItems = this.expandedItems.filter(k => k !== key);
+        } else {
+          this.expandedItems.push(key);
+        }
+      },
+      isExpanded(index, pIndex) {
+        const key = `${index}-${pIndex}`;
+        return this.expandedItems.includes(key);
+      }
     },
-  },
-  mounted() {
-    window.addEventListener('scroll', this.handleScroll);
-  },
-  beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
-  },
-};
+    mounted() {
+      window.addEventListener('scroll', this.handleScroll);
+    },
+    beforeUnmount() {
+      window.removeEventListener('scroll', this.handleScroll);
+    }
+  };
 </script>
 
 <style scoped>
   .title {
-    font-size: 3em;
-    color: #19488f;
+    font-size: 2em;
+    color: #3496ce;
     font-family: 'DFKai-SB', '標楷體', serif;
-    border-bottom: 1.7px solid #2471e5;
+    border-bottom: 1.7px solid #3496ce;
   }
 
   .back-to-top {
@@ -153,4 +245,23 @@ export default {
       font-size: 16px;
     }
   }
+
+  .arrow {
+    transition: transform 0.3s ease;
+  }
+  .rotated {
+    transform: rotate(-180deg);
+  }
+  .collapse-content {
+    transition: max-height 0.3s ease;
+    overflow: hidden;
+  }
+
+  .bg-deco {
+  bottom: 0;
+  right: 0;
+  width: 300px;
+  z-index: 0;
+  pointer-events: none;
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<nav class="navbar navbar-expand-lg shadow-sm bg-white">
+		<nav class="navbar navbar-expand-lg shadow bg-white fixed-top">
 			<div class="d-flex align-items-center">
 				<div>
 					<button class="icon-button text-primary" @click="handleMenu">
@@ -30,8 +30,6 @@
 import MenuItem from './menu-item.vue';
 import routes from '@/router/routers.js';
 
-const HOME_PAGE = 'home';
-
 export default {
 	name: 'NavBar',
 	data() {
@@ -41,7 +39,7 @@ export default {
 	},
 	computed: {
 		routers() {
-			return routes.filter((route) => route.name && route.name !== HOME_PAGE);
+			return routes.filter((route) => route.name);
 		}
 	},
 	components: {

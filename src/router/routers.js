@@ -10,12 +10,6 @@ const routes = [
     component: () => import('@/views/content/home.vue'),
   },
   {
-    path: '/resume',
-    name: 'resume',
-    meta: {title: '履歷表'},
-    component: () => import('@/views/content/resume/index.vue'),
-  },
-  {
     path: '/Portfolio',
     name: 'Portfolio',
     // component: About,
