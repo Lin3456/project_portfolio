@@ -12,10 +12,14 @@ const routes = [
   {
     path: '/Portfolio',
     name: 'Portfolio',
-    // component: About,
     meta: {title: '作品集', hidden: false},
     children: [
-      
+      {
+        path: '/ToDoList',
+        name: 'ToDoList',
+        meta: {title: 'ToDoList'},
+        component: () => import('@/views/content/toDoList.vue'),
+      }
     ],
   },
 ]

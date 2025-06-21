@@ -4,11 +4,11 @@
     <section
       class="text-dark text-center position-relative"
       :style="{
-        backgroundImage: `url(/src/assets/background.png), linear-gradient(to right, rgb(223 255 238), rgb(145 241 170))`,
+        backgroundImage: `url(/src/assets/background.png), linear-gradient(to right, rgb(253 252 166), rgb(248 255 101))`,
         backgroundSize: 'auto 100%',
         backgroundPosition: 'right bottom',
         backgroundRepeat: 'no-repeat',
-        height: '70vh',
+        height: '75vh',
       }"
     >
       <div
@@ -23,14 +23,14 @@
           class="d-flex justify-content-between align-items-center"
           style="max-width: 4em"
         >
-          <a :href="profile.info.github" target="_blank" style="color: #181717">
+          <a :href="profile.info.github" target="_blank" class="text-dark">
             <i class="fa-brands fa-github fa-2x"></i>
           </a>
           <a
             href="/files/resume.pdf"
             download="林柔妤_履歷表.pdf"
           >
-            <i class="fas fa-file-pdf fa-2x text-dark ms-3"></i>
+            <i class="fas fa-file-pdf fa-2x text-secondary ms-3"></i>
           </a>
         </div>
       </div>
@@ -160,7 +160,7 @@
     <button
       v-show="showTop"
       @click="scrollToTop"
-      :class="['btn btn-outline-success back-to-top', { show: showTop }]"
+      :class="['btn btn-outline-secondary back-to-top', { show: showTop }]"
     >
       <i class="fas fa-arrow-up"></i>
     </button>

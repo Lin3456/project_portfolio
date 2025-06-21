@@ -105,7 +105,7 @@ export default {
   background-color: #3b3b59;
 	color: white;
   box-shadow: 2px 0 5px rgba(0,0,0,0.3);
-  z-index: 1000;
+  z-index: 2000;
 	font-size: 20px;
 	overflow-y: hidden;
 }

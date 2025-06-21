@@ -20,13 +20,13 @@
 					</span>
 
 					<MenuItem
-					class="col"
+					  class="col"
 						v-if="route.meta.hidden"
 						:data="route.children"
 						@close="$emit('close')"
 					/>
         </div>
-				<!-- 有子節點 -->
+				<!-- 沒有子節點 -->
 				<template v-else>
 					<div
 						class="menu-item"
@@ -64,7 +64,7 @@ export default {
       this.$router.push(route.path).catch(() => {});
       this.$emit('close');
     }
-  },
+  }
 };
 </script>
 
