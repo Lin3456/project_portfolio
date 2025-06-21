@@ -4,7 +4,7 @@
     <section
       class="text-dark text-center position-relative"
       :style="{
-        backgroundImage: `url(/src/assets/background.png), linear-gradient(to right, rgb(253 252 166), rgb(248 255 101))`,
+        backgroundImage: `url(${bg}), linear-gradient(to right, rgb(253 252 166), rgb(248 255 101))`,
         backgroundSize: 'auto 100%',
         backgroundPosition: 'right bottom',
         backgroundRepeat: 'no-repeat',
