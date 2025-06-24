@@ -8,20 +8,23 @@
         <div
 					v-if="route.children"
 					class="menu-item row"
-					@click="route.meta.hidden = !route.meta.hidden"
+					@click="toggleMenu(route.name)"
 				>
-          <span class="col-10">{{ route.meta.title || route.name }}</span>
+          <span class="col-9">
+            <i :class="`fa-solid ${route.meta.icon} me-1`"/>
+            {{ route.meta.title || route.name }}
+          </span>
 					<span
 						v-if="route.children && route.children.length"
 						class="arrow col-2"
-						:class="{ open: route.meta.hidden }"
+						:class="{ open: isOpen(route.name) }"
 					>
 					˃
 					</span>
 
 					<MenuItem
 					  class="col"
-						v-if="route.meta.hidden"
+						v-if="isOpen(route.name)"
 						:data="route.children"
 						@close="$emit('close')"
 					/>
@@ -32,6 +35,7 @@
 						class="menu-item"
 						@click="navigateTo(route)"
 					>
+            <i :class="`fa-solid ${route.meta.icon} me-1`"/>
 						{{ route.meta.title || route.name }}
 					</div>
 				</template>
@@ -56,12 +60,19 @@ export default {
 	data() {
 		return {
 			showChild: false,
+      openMap: {},
 		};
 	},
   methods: {
+    toggleMenu(routeName) {
+      this.openMap[routeName] = !this.openMap[routeName];
+    },
+    isOpen(routeName) {
+      return !!this.openMap[routeName];
+    },
     navigateTo(route) {
       if (!route.component) return;
-      this.$router.push(route.path).catch(() => {});
+      this.$router.push({name: route.name}).catch(() => {});
       this.$emit('close');
     }
   }

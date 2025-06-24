@@ -55,19 +55,19 @@ p {
 	}
 
 	h1 {
-		font-size: 24px;
+		font-size: 22px;
 	}
 
 	h2 {
-		font-size: 20px;
-	}
-
-	h3 {
 		font-size: 18px;
 	}
 
+	h3 {
+		font-size: 16px;
+	}
+
 	.tag {
-		font-size: 13px;
+		font-size: 15px;
 		padding: 3px 8px;
 	}
 }

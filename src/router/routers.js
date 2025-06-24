@@ -6,18 +6,28 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    meta: {title: '首頁'},
+    meta: {
+      title: '首頁',
+      icon: 'fa-house',
+    },
     component: () => import('@/views/content/home.vue'),
   },
   {
     path: '/Portfolio',
     name: 'Portfolio',
-    meta: {title: '作品集', hidden: false},
+    meta: {
+      title: '作品集',
+      icon: 'fa-briefcase',
+      hidden: false,
+    },
     children: [
       {
-        path: '/ToDoList',
+        path: 'ToDoList',
         name: 'ToDoList',
-        meta: {title: 'ToDoList'},
+        meta: {
+          title: 'ToDoList',
+          icon: 'fa-list',
+        },
         component: () => import('@/views/content/toDoList.vue'),
       }
     ],
