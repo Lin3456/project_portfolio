@@ -8,6 +8,7 @@ const profile = {
     },
     summary: '以業務邏輯為核心的前端開發者',
 		github: 'https://github.com/Lin3456/project_portfolio',
+		resume: 'https://pda.104.com.tw/profile/share/a5kyQj0Xu5vpcg6VcBCJiM1kEPFG7Bou',
   },
 	skills: {
 		frontEnd: [
@@ -134,6 +135,15 @@ const profile = {
 			department: '資訊管理系',
 			school: '致理科技大學	',
 			year: '2017 - 2020'
+		}
+	],
+	works: [
+		{
+			title: '天氣預報',
+			icon: 'fa-cloud',
+			color: 'rgb(61 208 217)',
+			href: 'weather/index',
+			description: '說明: 根據【氣象資料開放平臺】提供天氣預報'
 		}
 	]
 }

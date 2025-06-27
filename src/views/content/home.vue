@@ -2,35 +2,28 @@
   <div>
     <!-- 背景 -->
     <section
-      class="text-dark text-center position-relative"
+      class="custom-section text-dark text-center position-relative"
       :style="{
-        backgroundImage: `url(${bg}), linear-gradient(to right, rgb(253 252 166), rgb(248 255 101))`,
-        backgroundSize: 'auto 100%',
-        backgroundPosition: 'right bottom',
-        backgroundRepeat: 'no-repeat',
-        height: '75vh',
+        backgroundImage: `url(${bg}), linear-gradient(to right, rgb(213 255 159), rgb(202 255 114))`,
       }"
     >
       <div
         class="text-start position-absolute start-0 p-4"
         :style="{top: '60%', transform: 'translateY(-40%)'}"
       >
-        <p class="h2 self-DFKai">{{ profile.info.name }}</p>
-        <p class="self-PMingLiU" style="font-size:25px">
+        <p class="text-dark h1 self-DFKai">{{ profile.info.name }}</p>
+        <p class="text-secondary introduction self-PMingLiU">
           {{ `${profile.info.title} | ${profile.info.summary}` }}
         </p>
         <div
           class="d-flex justify-content-between align-items-center"
           style="max-width: 4em"
         >
-          <a :href="profile.info.github" target="_blank" class="text-dark">
+          <a :href="profile.info.github" target="_blank" style="color: #6e40c9">
             <i class="fa-brands fa-github fa-2x"></i>
           </a>
-          <a
-            href="/files/resume.pdf"
-            download="林柔妤_履歷表.pdf"
-          >
-            <i class="fas fa-file-pdf fa-2x text-secondary ms-3"></i>
+          <a :href="profile.info.resume" target="_blank">
+            <i class="fa-regular fa-file-pdf fa-2x text-dark ms-3"></i>
           </a>
         </div>
       </div>
@@ -122,19 +115,29 @@
     </section>
 
     <!-- 作品 -->
-    <!-- <section class="container py-5">
-      <p class="fw-bold mb-4">作品展示</p>
+    <section class="container-fluid px-4 py-2">
+      <p class="fw-bold mb-4 title">作品展示</p>
       <div class="row row-cols-1 row-cols-md-2 g-4">
-        <div class="col" v-for="(work, index) in works" :key="index">
+        <div class="col" v-for="(work, index) in profile.works" :key="index">
           <div class="card h-100">
-            <div :href="work.link" class="card-body" target="_blank">
-              <h5 class="card-title">{{ work.title }}</h5>
-              <p class="card-text">{{ work.description }}</p>
+            <div @click="openWork(work.href)" class="card-body d-flex align-items-center" style="cursor: pointer;">
+              
+              <!-- 左邊 icon -->
+              <div class="icon-container me-3" :style="`color: ${work.color}`">
+                <i :class="`fa-solid ${work.icon}`" style="font-size: 3rem;"></i>
+              </div>
+              
+              <!-- 右邊內容 -->
+              <div class="text-container">
+                <h5 class="card-title mb-1">{{ work.title }}</h5>
+              </div>
+              
             </div>
           </div>
+
         </div>
       </div>
-    </section> -->
+    </section>
 
     <footer class="bg-dark text-white py-3 self-times">
       <div class="row container">
@@ -199,6 +202,10 @@
       isExpanded(index, pIndex) {
         const key = `${index}-${pIndex}`;
         return this.expandedItems.includes(key);
+      },
+      openWork(href) {
+        const url = this.$router.resolve(href).href
+        window.open(url, '_blank')
       }
     },
     mounted() {
@@ -211,6 +218,10 @@
 </script>
 
 <style scoped>
+  .introduction {
+    font-size: 25px;
+  }
+
   .title {
     font-size: 2em;
     color: #3496ce;
@@ -218,6 +229,7 @@
     border-bottom: 1.7px solid #3496ce;
   }
 
+  /** 返回頂端 */
   .back-to-top {
     position: fixed;
     bottom: 30px;
@@ -246,17 +258,39 @@
     }
   }
 
+  /** section */
+  .custom-section {
+    background-size: auto 100%;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    height: 75vh;
+  }
+
+  @media (max-width: 768px) {
+    .custom-section {
+      background-size: contain;
+      height: 40vh;
+    }
+
+    .introduction {
+      font-size: 16px;
+    }
+  }
+
+  /** collapse */
+  .collapse-content {
+    transition: max-height 0.3s ease;
+    overflow: hidden;
+  }
+
   .arrow {
     transition: transform 0.3s ease;
   }
   .rotated {
     transform: rotate(-180deg);
   }
-  .collapse-content {
-    transition: max-height 0.3s ease;
-    overflow: hidden;
-  }
 
+  /** 插圖 */
   .bg-deco {
   bottom: 0;
   right: 0;

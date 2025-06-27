@@ -3,7 +3,10 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue';
 import router from './router';
-import Tag from '@/components/tag.vue'
+import Tag from '@/components/tag.vue';
+import Modal from '@/components/modal.vue';
+import Button from '@/components/button.vue';
+import AutoComplete from '@/components/autoComplete.vue'; 
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,4 +20,7 @@ const pinia = createPinia()
 app.use(router)
 app.use(pinia)
 app.component('Tag', Tag)
+app.component('Modal', Modal)
+app.component('Button', Button)
+app.component('AutoComplete', AutoComplete)
 app.mount('#app')

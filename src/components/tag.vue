@@ -5,8 +5,9 @@
         ref="tags"
         class="tag me-2 mb-2" 
         :title="item.tooltip"
+        @click="clickTag(item)"
       >
-        {{item.label}}
+        {{item.label || item}}
       </span>
     </div>
   </div>
@@ -21,6 +22,11 @@ export default {
     data: {
       type: Array,
       default: () => [],
+    },
+  },
+  methods: {
+    clickTag(item) {
+      this.$emit('onClick', item);
     },
   },
   mounted() {

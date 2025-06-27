@@ -13,25 +13,33 @@ const routes = [
     component: () => import('@/views/content/home.vue'),
   },
   {
-    path: '/Portfolio',
-    name: 'Portfolio',
+    path: '/weather',
+    name: 'weather',
     meta: {
-      title: '作品集',
-      icon: 'fa-briefcase',
+      title: '天氣預報',
+      icon: 'fa-cloud',
       hidden: false,
     },
     children: [
       {
-        path: 'ToDoList',
-        name: 'ToDoList',
+        path: 'index',
+        name: 'index',
         meta: {
-          title: 'ToDoList',
-          icon: 'fa-list',
+          title: '天氣預報',
+          icon: 'fa-house',
         },
-        component: () => import('@/views/content/toDoList.vue'),
-      }
+        component: () => import('@/views/content/weather/index.vue'),
+      },
     ],
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: '404',
+    meta: {
+      title: '404',
+    },
+    component: () => import('@/views/content/error/404.vue'),
+  }  
 ]
 
 export default routes;

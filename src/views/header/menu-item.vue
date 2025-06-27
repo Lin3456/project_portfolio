@@ -17,9 +17,9 @@
 					<span
 						v-if="route.children && route.children.length"
 						class="arrow col-2"
-						:class="{ open: isOpen(route.name) }"
+						
 					>
-					˃
+					  <i class="fa-solid fa-chevron-right" :class="{ open: isOpen(route.name) }"></i>
 					</span>
 
 					<MenuItem
@@ -111,22 +111,23 @@ export default {
 
 /** 箭頭 */
 .arrow {
-  display: inline-block;
-  transition: transform 0.3s ease;
   /* 預設是「>」的方向，旋轉 -90deg 變成「v」 */
-  transform: rotate(0deg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   user-select: none;
   cursor: pointer;
-	margin: auto auto auto 0px;
-	align-items: center;
-	font-size: 18px;
+  font-size: 18px;
+  vertical-align: middle;
 }
 
-.arrow.open {
+.arrow i {
+  transition: transform 0.3s ease;
+  transform-origin: center center;
+}
+
+.arrow i.open {
   /* 展開時轉回正常方向「v」 */
   transform: rotate(90deg);
-	font-size: 18px;
-  margin-top: 10px;
 }
-
 </style>

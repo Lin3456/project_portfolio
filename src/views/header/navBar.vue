@@ -30,6 +30,8 @@
 import MenuItem from './menu-item.vue';
 import routes from '@/router/routers.js';
 
+const SKIP_MENU = ['404'];
+
 export default {
 	name: 'NavBar',
 	data() {
@@ -39,7 +41,7 @@ export default {
 	},
 	computed: {
 		routers() {
-			return routes.filter((route) => route.name);
+			return routes.filter((route) => route.name && !SKIP_MENU.includes(route.name));
 		}
 	},
 	components: {
