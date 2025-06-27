@@ -44,3 +44,35 @@ export function reverseGeocode(lat, lon) {
       });
   });
 };
+
+/**
+ * 根據中文地名查詢經緯度
+ * @param {string} place 中文地區名稱
+ * @returns {Promise<{ lat: number, lon: number }>}
+ */
+export function geocode(place) {
+  return new Promise((resolve, reject) => {
+    axios.get(URL, {
+      params: {
+        q: place,
+        key: KEY,
+        language: 'zh-Hant',
+        no_annotations: 1,
+        limit: 1
+      }
+    })
+    .then((res) => {
+      const results = res.data.results;
+      if (!results || results.length === 0) {
+        reject(new Error('查無經緯度'));
+        return;
+      }
+
+      const { lat, lng } = results[0].geometry;
+      resolve({ lat, lon: lng });
+    })
+    .catch((err) => {
+      reject(new Error(err));
+    });
+  });
+}
