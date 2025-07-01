@@ -11,9 +11,68 @@
       <div class="col">
         <!-- 當日天氣 -->
         <div class="card">
-          <div class="card-body">
+          <div v-if="!weather.error">
+            <div class="card-body d-flex align-items-center gap-4">
+              <img class="weather-icon" :src="weather.icon"/>
 
+              <!-- 溫度相關資料 -->
+              <div class="d-flex flex-column">
+                <span class="h4">{{ `${weather.celsius}°C | ${weather.fahrenheit} °F` }}</span>
+                <small class="text-secondary">{{ `(體感${weather.apparent_temperature}°C | ${weather.apparent_temperature} °F)` }}</small>
+                <span style="font-size: 16px">降雨機率: {{ weather.precipitation_probability }}%</span>
+                <span style="font-size: 16px">濕度: {{ weather.relative_humidity }}%</span>
+                <span style="font-size: 16px">風速: {{ weather.wind_speed }} 公里/時</span>
+              </div>
+
+              <!-- 時間資訊 -->
+              <div class="d-flex flex-column text-center ms-auto align-self-start pt-2">
+                <span class="h1">{{ currentWeekday }}</span>
+                <span>{{ currentHour }}</span>
+                <span>{{ weather.text }}</span>
+              </div>
+            </div>
+
+            <div class="px-3">
+              <!-- Tab 標籤 -->
+              <ul class="nav nav-tabs mb-2">
+                <li class="nav-item">
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tempChart">氣溫</button>
+                </li>
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#rainChart">降雨機率</button>
+                </li>
+              </ul>
+
+              <div class="tab-content p-3" style="min-height: 250px;">
+                <div class="tab-pane fade show active" id="tempChart">
+                  <!-- 氣溫折線圖 -->
+                  <LineChart
+                    v-if="weather.hourly"
+                    label="氣溫 (°C)"
+                    :labels="weather.hourly.time"
+                    :data="weather.hourly.temperature"
+                    color="#f57c00"
+                    bgColor="rgba(245, 124, 0, 0.2)"
+                    :stepSize="2"
+                  />
+                </div>
+                <div class="tab-pane fade" id="rainChart">
+                  <!-- 降雨機率折線圖 -->
+                  <LineChart
+                    v-if="weather.hourly"
+                    label="降雨機率 (%)"
+                    :labels="weather.hourly.time"
+                    :data="weather.hourly.precipitation"
+                    color="#2196f3"
+                    bgColor="rgba(33, 150, 243, 0.2)"
+                    :stepSize="2"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
+
+          <div v-else class="card-body">{{weather.error}}</div>
         </div>
       </div>
     </div>
@@ -23,7 +82,7 @@
       <template #body>
         <div class="input-group">
           <AutoComplete :data="cityList" v-model="area.query" plac="請輸入地區名稱（例: 臺北市 信義區）"/>
-          <Button @click="search">
+          <Button :isLoading="btnLoading" @click="search">
             <i class="fa-solid fa-magnifying-glass"/>
           </Button>
         </div>
@@ -50,28 +109,52 @@
 
 <script>
 import * as _MAP from '@/api/map.js';
-import * as _WEATHER from '@/api/weather.js';
+import { useWeatherStore } from '@/stores/weather';
 import taiwanDistricts from '@/assets/data/taiwan-districts.json';
+
+import LineChart from '@/components/lineChart.vue';
 
 export default {
   name: 'weather',
   data() {
     return {
+      weatherStore: useWeatherStore(),
+
       allowLocal: true,
       city: '臺北市 信義區',
-      currWeather: null,
       cityList: [],
       
       // modal
       area: {
         query: '',
         list: [],
-      }
+      },
+
+      // button
+      btnLoading: false,
     };
+  },
+  computed: {
+    weather() {
+      return this.weatherStore.currentWeather ?? {};
+    },
+    currentHour() {
+      const now = new Date();
+      const hour = now.getHours().toString().padStart(2, '0');
+      return `${hour}:00`;
+    },
+    currentWeekday() {
+      const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+      return days[new Date().getDay()]
+    }
+  },
+  components: {
+    LineChart,
   },
   methods: {
     async init() {
-      await this.getLocation();
+      await this.getLocation(); // 取得位置
+
       this.getCityList();
       this.getAreaList();
     },
@@ -88,6 +171,7 @@ export default {
           await _MAP.reverseGeocode(latitude, longitude)
             .then(async(name) => {
               this.city = name;
+              this.setLocation(name, latitude, longitude);
             })
             .catch((err) => {
               alert(`位置取得失敗，原因: ${err}`);
@@ -100,6 +184,9 @@ export default {
           window.alert(`取得位置失敗，原因: ${err.message}`);
         }
       );
+    },
+    setLocation(city, lat, lon) {
+      this.weatherStore.setLocation(city, lat, lon)
     },
     getCityList() {
       for (const city in taiwanDistricts) {
@@ -125,15 +212,18 @@ export default {
     async search () {
       if (!this.area.query) return;
 
+      this.btnLoading = true;
       await _MAP.geocode(this.area.query)
         .then(async (res) => {
-          await this.getCurrentWatcher(res.lat, res.lon);
+          this.setLocation(this.area.query, res.lat, res.lon);
           this.closeModal();
         })
         .catch((err) => {
           alert(`OpenCange 定位失敗，原因: ${err}`);
         })
-
+        .finally(() => {
+          this.btnLoading = false;
+        })
     },
     handleTag(item) {
       const city = this.city.split(' ')[0];
@@ -153,8 +243,8 @@ export default {
       this.$refs.mapModal.hide();
     },
   },
-  mounted() {
-    this.init();
+  async mounted() {
+    await this.init();
   }
 };
 </script>
@@ -171,5 +261,10 @@ export default {
   .title .btn-link {
     font-size: 20px;
     vertical-align: middle;
+  }
+
+  .weather-icon {
+    width: 96px;
+    height: 96px;
   }
 </style>

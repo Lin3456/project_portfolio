@@ -4,7 +4,7 @@
     :disabled="isLoading"
     @click="handleClick"
   >
-    <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <span v-if="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     <slot v-else></slot>
   </button>
 </template>
