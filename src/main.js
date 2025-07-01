@@ -6,6 +6,7 @@ import router from './router';
 import Tag from '@/components/tag.vue';
 import Modal from '@/components/modal.vue';
 import Button from '@/components/button.vue';
+import Loading from '@/components/loading.vue';
 import AutoComplete from '@/components/autoComplete.vue'; 
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -22,5 +23,6 @@ app.use(pinia)
 app.component('Tag', Tag)
 app.component('Modal', Modal)
 app.component('Button', Button)
+app.component('Loading', Loading)
 app.component('AutoComplete', AutoComplete)
 app.mount('#app')

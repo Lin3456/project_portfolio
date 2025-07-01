@@ -41,7 +41,7 @@ export function get7DayWeather(lat, lon) {
     params: {
       latitude: lat,
       longitude: lon,
-      daily: CURR_COLUMN,
+      daily: FUTURE_COLUMN,
       forecast_days: 7,
       timezone: 'Asia/Taipei',
     }

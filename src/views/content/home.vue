@@ -172,7 +172,7 @@
 
 <script>
   import bg from '@/assets/background.png';
-  import profile from './resume/profile.js';
+  import profile from '@/assets/data/profile.js';
 
   export default {
     name: 'home',

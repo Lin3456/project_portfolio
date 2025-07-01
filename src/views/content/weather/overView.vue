@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid p-4">
+  <div class="container-fluid p-4 position-relative">
     <div class="title">
       搜尋區域: {{ city }}
       <button type="button" class="btn btn-link" @click="openModal">
@@ -8,27 +8,27 @@
     </div>
 
     <div class="row row-cols-1 row-cols-md-2 g-4">
+      <!-- 當日天氣 -->
       <div class="col">
-        <!-- 當日天氣 -->
         <div class="card">
-          <div v-if="!weather.error">
+          <div v-if="!todayWeather.error">
             <div class="card-body d-flex align-items-center gap-4">
-              <img class="weather-icon" :src="weather.icon"/>
+              <img class="weather-icon" :src="todayWeather.icon"/>
 
               <!-- 溫度相關資料 -->
               <div class="d-flex flex-column">
-                <span class="h4">{{ `${weather.celsius}°C | ${weather.fahrenheit} °F` }}</span>
-                <small class="text-secondary">{{ `(體感${weather.apparent_temperature}°C | ${weather.apparent_temperature} °F)` }}</small>
-                <span style="font-size: 16px">降雨機率: {{ weather.precipitation_probability }}%</span>
-                <span style="font-size: 16px">濕度: {{ weather.relative_humidity }}%</span>
-                <span style="font-size: 16px">風速: {{ weather.wind_speed }} 公里/時</span>
+                <span class="h4">{{ `${todayWeather.celsius}°C | ${todayWeather.fahrenheit} °F` }}</span>
+                <small class="text-secondary">{{ `(體感${todayWeather.apparent_temperature}°C | ${todayWeather.apparent_temperature} °F)` }}</small>
+                <span style="font-size: 16px">降雨機率: {{ todayWeather.precipitation_probability }}%</span>
+                <span style="font-size: 16px">濕度: {{ todayWeather.relative_humidity }}%</span>
+                <span style="font-size: 16px">風速: {{ todayWeather.wind_speed }} 公里/時</span>
               </div>
 
               <!-- 時間資訊 -->
               <div class="d-flex flex-column text-center ms-auto align-self-start pt-2">
                 <span class="h1">{{ currentWeekday }}</span>
                 <span>{{ currentHour }}</span>
-                <span>{{ weather.text }}</span>
+                <span>{{ todayWeather.text }}</span>
               </div>
             </div>
 
@@ -47,10 +47,10 @@
                 <div class="tab-pane fade show active" id="tempChart">
                   <!-- 氣溫折線圖 -->
                   <LineChart
-                    v-if="weather.hourly"
+                    v-if="todayWeather.hourly"
                     label="氣溫 (°C)"
-                    :labels="weather.hourly.time"
-                    :data="weather.hourly.temperature"
+                    :labels="todayWeather.hourly.time"
+                    :data="todayWeather.hourly.temperature"
                     color="#f57c00"
                     bgColor="rgba(245, 124, 0, 0.2)"
                     :stepSize="2"
@@ -59,10 +59,10 @@
                 <div class="tab-pane fade" id="rainChart">
                   <!-- 降雨機率折線圖 -->
                   <LineChart
-                    v-if="weather.hourly"
+                    v-if="todayWeather.hourly"
                     label="降雨機率 (%)"
-                    :labels="weather.hourly.time"
-                    :data="weather.hourly.precipitation"
+                    :labels="todayWeather.hourly.time"
+                    :data="todayWeather.hourly.precipitation"
                     color="#2196f3"
                     bgColor="rgba(33, 150, 243, 0.2)"
                     :stepSize="2"
@@ -72,7 +72,54 @@
             </div>
           </div>
 
-          <div v-else class="card-body">{{weather.error}}</div>
+          <div v-else class="card-body">{{todayWeather.error}}</div>
+        </div>
+      </div>
+
+      <!-- 未來一周天氣(折線圖) -->
+      <div class="col">
+        <div class="card">
+          <div v-if="!weekWeather.error" class="card-body">
+            <p class="card-title h3">未來一周天氣</p>
+            <div class="card-body px-3">
+              <!-- Tab 標籤 -->
+              <ul class="nav nav-tabs mb-2">
+                <li class="nav-item">
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tempWeekChart">氣溫🌡️</button>
+                </li>
+                <li class="nav-item">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#rainWeekChart">降雨機率🌧️</button>
+                </li>
+              </ul>
+
+              <div class="tab-content p-3" style="min-height: 250px;">
+                <div class="tab-pane fade show active" id="tempWeekChart">
+                  <!-- 氣溫折線圖 -->
+                  <LineChart
+                    v-if="weekWeather.dates"
+                    label="氣溫 (°C)"
+                    :labels="weekWeather.dates"
+                    :data="weekWeather.maxTemp"
+                    color="#f57c00"
+                    bgColor="rgba(245, 124, 0, 0.2)"
+                  />
+                </div>
+                <div class="tab-pane fade" id="rainWeekChart">
+                  <!-- 降雨機率折線圖 -->
+                  <LineChart
+                    v-if="weekWeather.dates"
+                    label="降雨機率 (%)"
+                    :labels="weekWeather.dates"
+                    :data="weekWeather.precipitation_probability"
+                    color="#2196f3"
+                    bgColor="rgba(33, 150, 243, 0.2)"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div v-else class="card-body">{{weekWeather.error}}</div>
         </div>
       </div>
     </div>
@@ -104,6 +151,8 @@
         </div>
       </template>
     </Modal>
+
+    <Loading v-if="pageLoading" text="天氣資料載入中..."/>
   </div>
 </template>
 
@@ -130,13 +179,17 @@ export default {
         list: [],
       },
 
+      pageLoading: true,
       // button
       btnLoading: false,
     };
   },
   computed: {
-    weather() {
+    todayWeather() {
       return this.weatherStore.currentWeather ?? {};
+    },
+    weekWeather() {
+      return this.weatherStore.weekWeather ?? {};
     },
     currentHour() {
       const now = new Date();
@@ -146,7 +199,20 @@ export default {
     currentWeekday() {
       const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
       return days[new Date().getDay()]
-    }
+    },
+    weatherReady() {
+      return (
+        this.todayWeather && Object.keys(this.todayWeather).length > 0 &&
+        this.weekWeather && Object.keys(this.weekWeather).length > 0
+      );
+    },
+  },
+  watch: {
+    weatherReady(newVal) {
+      if (newVal) {
+        this.pageLoading = false;
+      }
+    },
   },
   components: {
     LineChart,
@@ -162,6 +228,7 @@ export default {
       if (!navigator.geolocation) {
         alert('瀏覽器不支援地理定位');
         await this.fallbackGeocode();
+
         return;
       }
 
@@ -180,9 +247,10 @@ export default {
             });
         },
         async (err) => {
-          this.allowLocal = false;
           alert(`取得位置失敗，原因: ${err.message}`);
           await this.fallbackGeocode();
+
+          this.allowLocal = false;
         }
       );
     },

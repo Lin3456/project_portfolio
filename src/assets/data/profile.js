@@ -142,7 +142,7 @@ const profile = {
 			title: '天氣預報',
 			icon: 'fa-cloud',
 			color: 'rgb(61 208 217)',
-			href: 'weather/index',
+			href: 'weather/overView',
 			description: '說明: 根據【氣象資料開放平臺】提供天氣預報'
 		}
 	]
