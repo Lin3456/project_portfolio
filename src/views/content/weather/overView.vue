@@ -160,8 +160,8 @@ export default {
     },
     async getLocation() {
       if (!navigator.geolocation) {
-        this.allowLocal = false;
         alert('瀏覽器不支援地理定位');
+        await this.fallbackGeocode();
         return;
       }
 
@@ -179,11 +179,23 @@ export default {
             .finally(() => {
             });
         },
-        (err) => {
+        async (err) => {
           this.allowLocal = false;
-          window.alert(`取得位置失敗，原因: ${err.message}`);
+          alert(`取得位置失敗，原因: ${err.message}`);
+          await this.fallbackGeocode();
         }
       );
+    },
+    async fallbackGeocode() {
+      await _MAP.geocode(this.city)
+        .then(async (res) => {
+          this.setLocation(this.area.query, res.lat, res.lon);
+        })
+        .catch((err) => {
+          alert(`OpenCange 定位 ${this.city} 失敗，原因: ${err}`);
+        })
+        .finally(() => {
+        })
     },
     setLocation(city, lat, lon) {
       this.weatherStore.setLocation(city, lat, lon)

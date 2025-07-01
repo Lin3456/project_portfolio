@@ -22,13 +22,13 @@ const routes = [
     },
     children: [
       {
-        path: 'index',
-        name: 'index',
+        path: 'overView',
+        name: 'weatherOverview',
         meta: {
-          title: '天氣預報',
+          title: '本周天氣概覽',
           icon: 'fa-house',
         },
-        component: () => import('@/views/content/weather/index.vue'),
+        component: () => import('@/views/content/weather/overView.vue'),
       },
     ],
   },
