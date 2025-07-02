@@ -12,7 +12,7 @@ export const useWeatherStore = defineStore('weather', {
         lon: null
       },
       locations: {
-        // 每個地點以 name 為 key，存放 today(今日天氣資料)、daily(一周天氣)
+        // 每個地點以 name 為 key，存放 today(今日天氣資料)、daily(一周天氣)、week()
       }
     }
   },
@@ -76,6 +76,7 @@ export const useWeatherStore = defineStore('weather', {
           todayData = {
             icon: weatherCodeMap[current.weathercode]?.icon,
             text: weatherCodeMap[current.weathercode]?.text,
+            color: weatherCodeMap[current.weathercode]?.color,
             celsius: current.temperature,
 
             // 華式溫度
@@ -137,12 +138,26 @@ export const useWeatherStore = defineStore('weather', {
         .then((res) => {
           const daily = res.daily;
 
+          const weekList = daily.time.map((t, index) => {
+            const code = daily.weathercode[index];
+            return {
+              date: moment(t).format('YYYY-MM-DD'),
+              temp: daily.temperature_2m_max[index],
+              precipitation: daily.precipitation_probability_max[index],
+              icon: weatherCodeMap[code]?.icon || '',
+              text: weatherCodeMap[code]?.text || '',
+              color: weatherCodeMap[code]?.color || '',
+            }
+          });
+
           dailyData = {
+            detail: weekList,
             dates: daily.time.map(t => moment(t).format('MM/DD')),
             maxTemp: daily.temperature_2m_max,
-            precipitation_probability: daily.precipitation_probability_max,
-            icon: weatherCodeMap[daily.weathercode]?.icon,
-            text: weatherCodeMap[daily.weathercode]?.text,
+            minTemp: daily.temperature_2m_min,
+            maxPrecipitation: daily.precipitation_probability_max,
+            minPrecipitation: daily.precipitation_probability_min,
+            weathercode: daily.weathercode,
           };
 
           dailyData.lastUpdated = Date.now();
@@ -154,6 +169,6 @@ export const useWeatherStore = defineStore('weather', {
         .finally(() => {
           this.locations[name].daily = dailyData;
         });
-    }
+    },
   }
 })

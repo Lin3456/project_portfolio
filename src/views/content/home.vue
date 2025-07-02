@@ -120,45 +120,21 @@
       <div class="row row-cols-1 row-cols-md-2 g-4">
         <div class="col" v-for="(work, index) in profile.works" :key="index">
           <div class="card h-100">
-            <div @click="openWork(work.href)" class="card-body d-flex align-items-center" style="cursor: pointer;">
-              
+            <div @click="openWork(work.href)" class="card-body d-flex" style="cursor: pointer;">
               <!-- 左邊 icon -->
               <div class="icon-container me-3" :style="`color: ${work.color}`">
-                <i :class="`fa-solid ${work.icon}`" style="font-size: 3rem;"></i>
+                <i :class="`fa-solid ${work.icon}`" style="font-size: 5rem;"></i>
               </div>
-              
               <!-- 右邊內容 -->
-              <div class="text-container">
-                <h5 class="card-title mb-1">{{ work.title }}</h5>
+              <div>
+                <p class="card-title h4 mb-1">{{ work.title }}</p>
+                <div style="white-space: pre-line; line-height: 1.5;">{{ work.description }}</div>
               </div>
-              
             </div>
           </div>
-
         </div>
       </div>
     </section>
-
-    <footer class="bg-dark text-white py-3 self-times">
-      <div class="row container">
-        <div class="col-3"></div>
-        <div class="col-4 d-flex align-items-center">
-          <ul class="list-unstyled">
-            <li>
-              <i class="fa-solid fa-phone me-2"></i>
-              {{profile.info.contact.phone}}
-            </li>
-            <li>
-              <i class="fa-solid fa-envelope me-2"></i>
-              {{profile.info.contact.email}}
-            </li>
-          </ul>
-        </div>
-        <div class="col-4 d-flex align-items-center">
-          <!-- <p class="mb-1">© 2025 林柔妤 All rights reserved.</p> -->
-        </div>
-      </div>
-    </footer>
 
     <button
       v-show="showTop"
@@ -171,8 +147,8 @@
 </template>
 
 <script>
-  import bg from '@/assets/background.png';
-  import profile from '@/assets/data/profile.js';
+import bg from '@/assets/background.png';
+import profile from '@/assets/data/profile.js';
 
   export default {
     name: 'home',

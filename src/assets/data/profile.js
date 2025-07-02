@@ -143,7 +143,7 @@ const profile = {
 			icon: 'fa-cloud',
 			color: 'rgb(61 208 217)',
 			href: 'weather/overView',
-			description: '說明: 根據【氣象資料開放平臺】提供天氣預報'
+			description: '地理定位API：OpenCage\n天氣資料API：Open-Meteo'
 		}
 	]
 }

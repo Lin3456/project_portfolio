@@ -7,21 +7,21 @@
       </button>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-2 g-4">
+    <div class="row g-4 align-items-stretch">
       <!-- 當日天氣 -->
-      <div class="col">
-        <div class="card">
+      <div class="col-12 col-md-6">
+        <div class="card h-100 d-flex flex-column">
           <div v-if="!todayWeather.error">
             <div class="card-body d-flex align-items-center gap-4">
-              <img class="weather-icon" :src="todayWeather.icon"/>
+              <i :class="`weather-icon ${todayWeather.icon}`" :style="{ color: todayWeather.color}"></i>
 
               <!-- 溫度相關資料 -->
               <div class="d-flex flex-column">
                 <span class="h4">{{ `${todayWeather.celsius}°C | ${todayWeather.fahrenheit} °F` }}</span>
                 <small class="text-secondary">{{ `(體感${todayWeather.apparent_temperature}°C | ${todayWeather.apparent_temperature} °F)` }}</small>
-                <span style="font-size: 16px">降雨機率: {{ todayWeather.precipitation_probability }}%</span>
-                <span style="font-size: 16px">濕度: {{ todayWeather.relative_humidity }}%</span>
-                <span style="font-size: 16px">風速: {{ todayWeather.wind_speed }} 公里/時</span>
+                <span style="font-size: 16px">{{ `降雨機率: ${todayWeather.precipitation_probability}%` }}</span>
+                <span style="font-size: 16px">{{ `濕度: ${todayWeather.relative_humidity}%` }}</span>
+                <span style="font-size: 16px">{{ `風速: ${todayWeather.wind_speed} 公里/時` }}</span>
               </div>
 
               <!-- 時間資訊 -->
@@ -48,11 +48,8 @@
                   <!-- 氣溫折線圖 -->
                   <LineChart
                     v-if="todayWeather.hourly"
-                    label="氣溫 (°C)"
                     :labels="todayWeather.hourly.time"
-                    :data="todayWeather.hourly.temperature"
-                    color="#f57c00"
-                    bgColor="rgba(245, 124, 0, 0.2)"
+                    :datasets="temperatureDatasets"
                     :stepSize="2"
                   />
                 </div>
@@ -60,11 +57,8 @@
                   <!-- 降雨機率折線圖 -->
                   <LineChart
                     v-if="todayWeather.hourly"
-                    label="降雨機率 (%)"
                     :labels="todayWeather.hourly.time"
-                    :data="todayWeather.hourly.precipitation"
-                    color="#2196f3"
-                    bgColor="rgba(33, 150, 243, 0.2)"
+                    :datasets="precipitationDatasets"
                     :stepSize="2"
                   />
                 </div>
@@ -76,43 +70,36 @@
         </div>
       </div>
 
-      <!-- 未來一周天氣(折線圖) -->
-      <div class="col">
-        <div class="card">
+      <!-- 未來一周天氣(氣溫/降雨機率 折線圖) -->
+      <div class="col-12 col-md-6">
+        <div class="card h-100 d-flex flex-column">
           <div v-if="!weekWeather.error" class="card-body">
             <p class="card-title h3">未來一周天氣</p>
             <div class="card-body px-3">
-              <!-- Tab 標籤 -->
+
               <ul class="nav nav-tabs mb-2">
                 <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tempWeekChart">氣溫🌡️</button>
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tempWeekChart">氣溫🌡️</button>
                 </li>
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#rainWeekChart">降雨機率🌧️</button>
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#rainWeekChart">降雨機率🌧️</button>
                 </li>
               </ul>
 
               <div class="tab-content p-3" style="min-height: 250px;">
-                <div class="tab-pane fade show active" id="tempWeekChart">
-                  <!-- 氣溫折線圖 -->
+                <div class="tab-pane fade" id="tempWeekChart">
                   <LineChart
                     v-if="weekWeather.dates"
-                    label="氣溫 (°C)"
                     :labels="weekWeather.dates"
-                    :data="weekWeather.maxTemp"
-                    color="#f57c00"
-                    bgColor="rgba(245, 124, 0, 0.2)"
+                    :datasets="weektemperatureDatasets"
                   />
                 </div>
-                <div class="tab-pane fade" id="rainWeekChart">
-                  <!-- 降雨機率折線圖 -->
+                <div class="tab-pane fade show active" id="rainWeekChart">
+
                   <LineChart
                     v-if="weekWeather.dates"
-                    label="降雨機率 (%)"
                     :labels="weekWeather.dates"
-                    :data="weekWeather.precipitation_probability"
-                    color="#2196f3"
-                    bgColor="rgba(33, 150, 243, 0.2)"
+                    :datasets="weekprecipitationDatasets"
                   />
                 </div>
               </div>
@@ -124,7 +111,15 @@
       </div>
     </div>
 
-    <!-- 選擇地區 -->
+    <!-- 未來一周天氣(列表) -->
+    <DetailCard v-if="weekWeather.detail" title="未來一周天氣概覽" :data="weekWeather.detail" class="mt-3 mb-5">
+      <template #extra="{ item }">
+        <span class="h4 mt-1">{{ `${item.temp}°C` }}</span>
+      </template>
+    </DetailCard>
+    <div v-else class="card-body">{{weekWeather.error}}</div>
+
+    <!-- 選擇地區(modal) -->
     <Modal ref="mapModal" title="選擇地區">
       <template #body>
         <div class="input-group">
@@ -162,6 +157,7 @@ import { useWeatherStore } from '@/stores/weather';
 import taiwanDistricts from '@/assets/data/taiwan-districts.json';
 
 import LineChart from '@/components/lineChart.vue';
+import DetailCard from '@/modularity/weather/detailCard.vue';
 
 export default {
   name: 'weather',
@@ -179,7 +175,6 @@ export default {
         list: [],
       },
 
-      pageLoading: true,
       // button
       btnLoading: false,
     };
@@ -203,19 +198,90 @@ export default {
     weatherReady() {
       return (
         this.todayWeather && Object.keys(this.todayWeather).length > 0 &&
-        this.weekWeather && Object.keys(this.weekWeather).length > 0
+        this.weekWeather && Object.keys(this.weekWeather).length > 0 &&
+        this.temperatureDatasets && Array.isArray(this.temperatureDatasets) && this.temperatureDatasets.length > 0 &&
+        this.precipitationDatasets && Array.isArray(this.precipitationDatasets) && this.precipitationDatasets.length > 0 &&
+        this.weektemperatureDatasets && Array.isArray(this.weektemperatureDatasets) && this.weektemperatureDatasets.length > 0 &&
+        this.weekprecipitationDatasets && Array.isArray(this.weekprecipitationDatasets) && this.weekprecipitationDatasets.length > 0
       );
     },
-  },
-  watch: {
-    weatherReady(newVal) {
-      if (newVal) {
-        this.pageLoading = false;
-      }
+      pageLoading() {
+        return !this.weatherReady
+      },
+
+    /** LineChart */
+    temperatureDatasets() {
+      const temp = this.todayWeather?.hourly?.temperature;
+      return temp && Array.isArray(temp)
+        ? [
+            {
+              label: '氣溫 (°C)',
+              data: temp,
+              borderColor: '#f57c00',
+              backgroundColor: 'rgba(245, 124, 0, 0.2)',
+            },
+          ]
+        : [];
     },
+    precipitationDatasets() {
+      const precipitation = this.todayWeather?.hourly?.precipitation;
+      return precipitation && Array.isArray(precipitation)
+        ? [
+          {
+            label: "降雨機率 (%)",
+            data: precipitation,
+            borderColor: "#2196f3",
+            backgroundColor: "rgba(33, 150, 243, 0.2)",
+          }
+        ]
+        : [];
+    },
+    weektemperatureDatasets() {
+      const maxTemp = this.weekWeather?.maxTemp;
+      const minTemp = this.weekWeather?.minTemp;
+
+      return maxTemp && Array.isArray(maxTemp) && minTemp && Array.isArray(minTemp)
+        ? [
+          {
+            label: "最高溫 (°C)",
+            data: maxTemp,
+            borderColor: "#d32f2f",
+            backgroundColor: "rgba(211, 47, 47, 0.3)",
+          },
+          {
+            label: "最低溫 (°C)",
+            data: minTemp,
+            borderColor: "#f57c01",
+            backgroundColor: "rgba(245, 124, 0, 0.3)",
+          }
+        ]
+        : [];    
+    },
+    weekprecipitationDatasets() {
+      const maxPrec = this.weekWeather?.maxPrecipitation;
+      const minPrec = this.weekWeather?.minPrecipitation;
+
+      return maxPrec && Array.isArray(maxPrec) && minPrec && Array.isArray(minPrec)
+        ? [
+          {
+            label: "最高降雨率(%)",
+            data: maxPrec,
+            borderColor: "#1565c0",
+            backgroundColor: "rgba(21, 101, 192, 0.3)",
+          },
+          {
+            label: "最低降雨率(%)",
+            data: minPrec,
+            borderColor: "#64b5f6",
+            backgroundColor: "rgba(100, 181, 246, 0.15)",
+          }
+        ]
+        : []; 
+    }
   },
   components: {
     LineChart,
+    DetailCard,
   },
   methods: {
     async init() {
@@ -296,10 +362,11 @@ export default {
       await _MAP.geocode(this.area.query)
         .then(async (res) => {
           this.setLocation(this.area.query, res.lat, res.lon);
+          this.city = this.area.query;
           this.closeModal();
         })
         .catch((err) => {
-          alert(`OpenCange 定位失敗，原因: ${err}`);
+          alert(`OpenCange 定位 ${this.city} 失敗，原因: ${err}`);
         })
         .finally(() => {
           this.btnLoading = false;
@@ -344,7 +411,6 @@ export default {
   }
 
   .weather-icon {
-    width: 96px;
-    height: 96px;
+    font-size: 5em;
   }
 </style>

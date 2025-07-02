@@ -5,7 +5,7 @@ const BASE_URL = 'https://api.open-meteo.com/v1/';
 
 /** 天氣預報 - 欄位 */
 const HOUR_COLUMN = 'temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,wind_direction_10m,uv_index,precipitation_probability';
-const FUTURE_COLUMN = 'temperature_2m_max,temperature_2m_min,precipitation_probability_max';
+const FUTURE_COLUMN = 'weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_probability_min';
 
 /** ----------------------------------------------------- */
 /** API                                                   */
