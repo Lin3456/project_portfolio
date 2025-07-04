@@ -1,11 +1,12 @@
 // weatherAPI.js
 import axios from 'axios';
+import moment from 'moment';
 
 const BASE_URL = 'https://api.open-meteo.com/v1/';
 
 /** 天氣預報 - 欄位 */
 const HOUR_COLUMN = 'temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,wind_direction_10m,uv_index,precipitation_probability';
-const FUTURE_COLUMN = 'weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_probability_min';
+const FUTURE_COLUMN = 'weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_probability_min,apparent_temperature_max,apparent_temperature_min,uv_index_max';
 
 /** ----------------------------------------------------- */
 /** API                                                   */
@@ -36,13 +37,17 @@ export function getFutureWeather(lat, lon) {
     });
 }
 
-export function get7DayWeather(lat, lon) {
+export function get8DayWeather(lat, lon) {
+  const startDate = moment().add(1, 'day').format('YYYY-MM-DD');
+  const endDate = moment().add(7, 'day').format('YYYY-MM-DD');
+
   return axios.get(`${BASE_URL}/forecast`, {
     params: {
       latitude: lat,
       longitude: lon,
       daily: FUTURE_COLUMN,
-      forecast_days: 7,
+      start_date: startDate,
+      end_date: endDate,
       timezone: 'Asia/Taipei',
     }
   })

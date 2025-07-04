@@ -12,17 +12,17 @@
         :style="{top: '60%', transform: 'translateY(-40%)'}"
       >
         <p class="text-dark h1 self-DFKai">{{ profile.info.name }}</p>
-        <p class="text-secondary introduction self-PMingLiU">
+        <p class="h4 text-secondary introduction self-PMingLiU mt-2 mb-3">
           {{ `${profile.info.title} | ${profile.info.summary}` }}
         </p>
         <div
           class="d-flex justify-content-between align-items-center"
           style="max-width: 4em"
         >
-          <a :href="profile.info.github" target="_blank" style="color: #6e40c9">
+          <a :href="profile.info.github" target="_blank" style="color: #6e40c9; font-size: 20px;">
             <i class="fa-brands fa-github fa-2x"></i>
           </a>
-          <a :href="profile.info.resume" target="_blank">
+          <a :href="profile.info.resume" target="_blank" style="font-size: 20px;">
             <i class="fa-regular fa-file-pdf fa-2x text-dark ms-3"></i>
           </a>
         </div>
@@ -51,7 +51,7 @@
       >
         <div class="card-body" style="white-space: pre-line;">
           <h5 class="card-title">{{ `${item.company} (${item.time})` }}</h5>
-          <p style="font-size: 1rem;">{{ item.position }}</p>
+          <p style="font-size: 17px;">{{ item.position }}</p>
           <p v-if="item.description" style="margin-left: 1rem">{{ item.description }}</p>
 
           <div
@@ -61,6 +61,7 @@
           >
             <div
               class="card-header d-flex justify-content-between align-items-center"
+              style="font-size: 18px"
               role="button"
               @click="toggleCollapse(index, pIndex)"
             >
@@ -73,26 +74,26 @@
             </div>
             <div v-show="isExpanded(index, pIndex)" class="collapse-content">
               <div class="card-body" style="white-space: pre-line;">
-                <span>
+                <span class="secound-title">
                   <strong>專案簡介:</strong><br>
                   {{ project.introduction }}
                 </span><br>
-                <span v-if="project.curSituation">
+                <span v-if="project.curSituation" class="secound-title">
                   <strong>當前狀態:</strong><br>
                   {{ project.curSituation }}
                 </span><br>
-                <span>
+                <span class="secound-title">
                   <strong>工作內容:</strong><br>
                   {{ project.job }}
                 </span>
 
                 <div class="mt-2" v-if="project.skills.frontEnd">
-                  <strong>前端技術:</strong>
+                  <strong class="secound-title">前端技術:</strong>
                   <Tag :data="project.skills.frontEnd" />
                 </div>
 
                 <div class="mt-2" v-if="project.skills.backEnd">
-                  <strong>後端技術:</strong>
+                  <strong class="secound-title">後端技術:</strong>
                   <Tag :data="project.skills.backEnd" />
                 </div>
               </div>
@@ -123,12 +124,12 @@
             <div @click="openWork(work.href)" class="card-body d-flex" style="cursor: pointer;">
               <!-- 左邊 icon -->
               <div class="icon-container me-3" :style="`color: ${work.color}`">
-                <i :class="`fa-solid ${work.icon}`" style="font-size: 5rem;"></i>
+                <i :class="`fa-solid ${work.icon} mt-2`" style="font-size: 5rem;"></i>
               </div>
               <!-- 右邊內容 -->
               <div>
-                <p class="card-title h4 mb-1">{{ work.title }}</p>
-                <div style="white-space: pre-line; line-height: 1.5;">{{ work.description }}</div>
+                <p class="card-title h3 mb-1">{{ work.title }}</p>
+                <div style="white-space: pre-line; line-height: 2;">{{ work.description }}</div>
               </div>
             </div>
           </div>
@@ -268,10 +269,22 @@ import profile from '@/assets/data/profile.js';
 
   /** 插圖 */
   .bg-deco {
-  bottom: 0;
-  right: 0;
-  width: 300px;
-  z-index: 0;
-  pointer-events: none;
-}
+    bottom: 0;
+    right: 0;
+    width: 300px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    .bg-deco {
+      width: 150px;
+      max-width: 30vw;
+      max-height: 30vh;
+    }
+  }
+
+  .secound-title {
+    font-size: 17px;
+  }
 </style>

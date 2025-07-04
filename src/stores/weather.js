@@ -77,6 +77,8 @@ export const useWeatherStore = defineStore('weather', {
             icon: weatherCodeMap[current.weathercode]?.icon,
             text: weatherCodeMap[current.weathercode]?.text,
             color: weatherCodeMap[current.weathercode]?.color,
+            tip: weatherCodeMap[current.weathercode]?.tip,
+            tipColor: weatherCodeMap[current.weathercode]?.bgClass,
             celsius: current.temperature,
 
             // 華式溫度
@@ -134,7 +136,7 @@ export const useWeatherStore = defineStore('weather', {
         return;
       }
 
-      await _WEATHER.get7DayWeather(lat, lon)
+      await _WEATHER.get8DayWeather(lat, lon)
         .then((res) => {
           const daily = res.daily;
 
@@ -143,7 +145,12 @@ export const useWeatherStore = defineStore('weather', {
             return {
               date: moment(t).format('YYYY-MM-DD'),
               temp: daily.temperature_2m_max[index],
+              min_temp: daily.temperature_2m_min[index],
+              apparent: daily.apparent_temperature_max[index],
+              min_apparent: daily.apparent_temperature_min[index],
               precipitation: daily.precipitation_probability_max[index],
+              minPrecipitation: daily.precipitation_probability_min[index] ?? '無資料',
+              uv_index: daily.uv_index_max[index],
               icon: weatherCodeMap[code]?.icon || '',
               text: weatherCodeMap[code]?.text || '',
               color: weatherCodeMap[code]?.color || '',
@@ -157,6 +164,8 @@ export const useWeatherStore = defineStore('weather', {
             minTemp: daily.temperature_2m_min,
             maxPrecipitation: daily.precipitation_probability_max,
             minPrecipitation: daily.precipitation_probability_min,
+            maxApparent: daily.apparent_temperature_max,
+            minApparent: daily.apparent_temperature_min,
             weathercode: daily.weathercode,
           };
 

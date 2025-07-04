@@ -7,6 +7,9 @@
       </button>
     </div>
 
+    <div>
+      <p class="h5 mb-3">📌 今日小提醒: {{ todayWeather.tip }}</p>
+    </div>
     <div class="row g-4 align-items-stretch">
       <!-- 當日天氣 -->
       <div class="col-12 col-md-6">
@@ -17,22 +20,22 @@
 
               <!-- 溫度相關資料 -->
               <div class="d-flex flex-column">
-                <span class="h4">{{ `${todayWeather.celsius}°C | ${todayWeather.fahrenheit} °F` }}</span>
-                <small class="text-secondary">{{ `(體感${todayWeather.apparent_temperature}°C | ${todayWeather.apparent_temperature} °F)` }}</small>
-                <span style="font-size: 16px">{{ `降雨機率: ${todayWeather.precipitation_probability}%` }}</span>
-                <span style="font-size: 16px">{{ `濕度: ${todayWeather.relative_humidity}%` }}</span>
-                <span style="font-size: 16px">{{ `風速: ${todayWeather.wind_speed} 公里/時` }}</span>
+                <span class="h4 mb-1">{{ `${todayWeather.celsius}°C | ${todayWeather.fahrenheit} °F` }}</span>
+                <small class="text-secondary mb-1">{{ `(體感${todayWeather.apparent_temperature}°C | ${todayWeather.apparent_temperature} °F)` }}</small>
+                <span class="text">{{ `降雨機率: ${todayWeather.precipitation_probability}%` }}</span>
+                <span class="text">{{ `濕度: ${todayWeather.relative_humidity}%` }}</span>
+                <span class="text">{{ `風速: ${todayWeather.wind_speed} 公里/時` }}</span>
               </div>
 
               <!-- 時間資訊 -->
-              <div class="d-flex flex-column text-center ms-auto align-self-start pt-2">
+              <div class="d-flex flex-column text-center ms-auto align-self-start">
                 <span class="h1">{{ currentWeekday }}</span>
-                <span>{{ currentHour }}</span>
-                <span>{{ todayWeather.text }}</span>
+                <span class="h3 mb-1">{{ currentHour }}</span>
+                <span class="h4">{{ todayWeather.text }}</span>
               </div>
             </div>
 
-            <div class="px-3">
+            <div class="px-3 mt-0">
               <!-- Tab 標籤 -->
               <ul class="nav nav-tabs mb-2">
                 <li class="nav-item">
@@ -65,13 +68,12 @@
               </div>
             </div>
           </div>
-
           <div v-else class="card-body">{{todayWeather.error}}</div>
         </div>
       </div>
 
-      <!-- 未來一周天氣(氣溫/降雨機率 折線圖) -->
       <div class="col-12 col-md-6">
+        <!-- 未來一周天氣(天氣摘要 表格 + 氣溫/降雨機率 折線圖) -->
         <div class="card h-100 d-flex flex-column">
           <div v-if="!weekWeather.error" class="card-body">
             <p class="card-title h3">未來一周天氣</p>
@@ -79,14 +81,41 @@
 
               <ul class="nav nav-tabs mb-2">
                 <li class="nav-item">
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tempWeekTable">天氣摘要</button>
+                </li>
+                <li class="nav-item">
                   <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tempWeekChart">氣溫🌡️</button>
                 </li>
                 <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#rainWeekChart">降雨機率🌧️</button>
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#rainWeekChart">降雨機率🌧️</button>
                 </li>
               </ul>
 
-              <div class="tab-content p-3" style="min-height: 250px;">
+              <div class="tab-content pt-3" style="min-height: 250px;">
+                <!-- 未來一週天氣摘要表 -->
+                <div class="tab-pane fade  show active" id="tempWeekTable">
+                  <table class="table table-bordered table-hover text-center align-middle">
+                    <thead class="table-light">
+                      <tr>
+                        <th>日期</th>
+                        <th>溫度 🌡️</th>
+                        <th>體感溫度 🤒</th>
+                        <th>降雨率 🌧️</th>
+                        <th>紫外線(max)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(day, index) in weekWeather.detail" :key="index">
+                        <td>{{ `${dayFormat(day.date)}(${getWeekDay(day.date)})` }}</td>
+                        <td>{{ `${day.temp} ~ ${day.min_temp}°C` }}</td>
+                        <td>{{ `${day.apparent} ~ ${day.min_apparent}°C` }}</td>
+                        <td>{{ `${day.precipitation} ~ ${day.minPrecipitation}%` }}</td>
+                        <td>{{ day.uv_index }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
                 <div class="tab-pane fade" id="tempWeekChart">
                   <LineChart
                     v-if="weekWeather.dates"
@@ -94,7 +123,7 @@
                     :datasets="weektemperatureDatasets"
                   />
                 </div>
-                <div class="tab-pane fade show active" id="rainWeekChart">
+                <div class="tab-pane fade" id="rainWeekChart">
 
                   <LineChart
                     v-if="weekWeather.dates"
@@ -105,16 +134,18 @@
               </div>
             </div>
           </div>
-
           <div v-else class="card-body">{{weekWeather.error}}</div>
         </div>
       </div>
     </div>
 
     <!-- 未來一周天氣(列表) -->
-    <DetailCard v-if="weekWeather.detail" title="未來一周天氣概覽" :data="weekWeather.detail" class="mt-3 mb-5">
+    <DetailCard v-if="weekWeather.detail" title="未來一周天氣概覽" :data="weekWeather.detail" class="mt-3 mb-2">
       <template #extra="{ item }">
-        <span class="h4 mt-1">{{ `${item.temp}°C` }}</span>
+        <div class="d-flex">
+          <span class="h4 mt-1">{{ `${item.temp}°C` }}</span>
+          <span class="text-secondary mt-1">{{ `(${item.apparent}°C)` }}</span>
+        </div>
       </template>
     </DetailCard>
     <div v-else class="card-body">{{weekWeather.error}}</div>
@@ -152,6 +183,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import * as _MAP from '@/api/map.js';
 import { useWeatherStore } from '@/stores/weather';
 import taiwanDistricts from '@/assets/data/taiwan-districts.json';
@@ -284,6 +316,17 @@ export default {
     DetailCard,
   },
   methods: {
+    getWeekDay(date) {
+      const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+      const index = moment(date).day();
+      
+      const dayText = '星期' + weekdays[index];
+
+      return dayText;
+    },
+    dayFormat(date) {
+      return moment(date).format('MM/DD');
+    },
     async init() {
       await this.getLocation(); // 取得位置
 
@@ -412,5 +455,9 @@ export default {
 
   .weather-icon {
     font-size: 5em;
+  }
+
+  .text {
+    line-height: 1.5;
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-dark text-white py-3 self-times mt-5">
+  <div class="bg-dark text-white py-3 self-times mt-5" style="font-size: 18px;">
     <div class="mx-5">
       <ul class="list-unstyled">
       <li>
