@@ -138,9 +138,9 @@
     <!-- 未來一周天氣(列表) -->
     <DetailCard v-if="weekWeather.detail" title="未來一周天氣概覽" :data="weekWeather.detail" class="mt-3 mb-2">
       <template #extra="{ item }">
-        <div class="d-flex">
-          <span class="h4 mt-1">{{ `${item.temp}°C` }}</span>
-          <span class="text-secondary mt-1">{{ `(${item.apparent}°C)` }}</span>
+        <div class="d-flex align-items-center">
+          <span>{{ `${item.temp}°C` }}</span>
+          <span class="text-secondary px-1">{{ `(${item.apparent}°C)` }}</span>
         </div>
       </template>
     </DetailCard>

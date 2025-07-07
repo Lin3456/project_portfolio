@@ -41,7 +41,7 @@ export default {
 }
 
 .loading-text {
-  font-size: 1rem;
+  font-size: 16px;
   color: #333;
 }
 </style>

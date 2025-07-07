@@ -52,7 +52,7 @@
         <div class="card-body" style="white-space: pre-line;">
           <h5 class="card-title">{{ `${item.company} (${item.time})` }}</h5>
           <p style="font-size: 17px;">{{ item.position }}</p>
-          <p v-if="item.description" style="margin-left: 1rem">{{ item.description }}</p>
+          <p v-if="item.description" style="margin-left: 8px">{{ item.description }}</p>
 
           <div
             class="card mb-2"
@@ -124,7 +124,7 @@
             <div @click="openWork(work.href)" class="card-body d-flex" style="cursor: pointer;">
               <!-- 左邊 icon -->
               <div class="icon-container me-3" :style="`color: ${work.color}`">
-                <i :class="`fa-solid ${work.icon} mt-2`" style="font-size: 5rem;"></i>
+                <i :class="`fa-solid ${work.icon} mt-2`" style="font-size: 80px;"></i>
               </div>
               <!-- 右邊內容 -->
               <div>

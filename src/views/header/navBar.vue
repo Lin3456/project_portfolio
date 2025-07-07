@@ -103,7 +103,7 @@ export default {
   left: 0;
   height: 100vh;
   width: 33.3333vw;
-	padding-top: 1rem;
+	padding-top: 16px;
   background-color: #3b3b59;
 	color: white;
   box-shadow: 2px 0 5px rgba(0,0,0,0.3);

@@ -84,7 +84,7 @@ body {
 .form-group {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
 }
 
 .form-label {

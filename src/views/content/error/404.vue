@@ -69,14 +69,14 @@ export default {
   }
 
   .button-group {
-    margin-top: 1rem;
+    margin-top: 16px;
     display: flex;
     justify-content: space-between;
     width: 100%;
   }
   
   .text-group {
-    margin-top: 1rem;
+    margin-top: 16px;
     display: flex;
     justify-content: space-between;
     width: 100%;

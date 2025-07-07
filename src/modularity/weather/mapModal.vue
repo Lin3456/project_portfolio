@@ -175,7 +175,7 @@ export default {
     line-height: 1em;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 8px;
   }
 
   .title .btn-link {
