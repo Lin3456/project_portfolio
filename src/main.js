@@ -13,7 +13,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'weather-icons/css/weather-icons.css';
-import '../src/assets/style.css';
+import '@/assets/style.css';
 
 
 const app = createApp(App)
