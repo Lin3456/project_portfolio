@@ -26,7 +26,7 @@ const routes = [
         name: 'weatherOverview',
         meta: {
           title: '本周天氣概覽',
-          icon: 'fa-house',
+          icon: 'fa-cloud-sun',
         },
         component: () => import('@/views/content/weather/overView.vue'),
       },

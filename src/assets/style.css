@@ -67,6 +67,23 @@ h4 {
 	}
 }
 
+/** input 相關設定 */
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  width: 120px;
+  margin-bottom: 0;
+	font-size: 18px;
+}
+
+.form-control {
+  flex: 1;
+}
+
 /* 文字字體 */
 .self-PMingLiU {
   font-family: 'PMingLiU', '新細明體', serif;
