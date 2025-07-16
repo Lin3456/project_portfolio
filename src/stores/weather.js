@@ -144,16 +144,21 @@ export const useWeatherStore = defineStore('weather', {
             const code = daily.weathercode[index];
             return {
               date: moment(t).format('YYYY-MM-DD'),
-              temp: daily.temperature_2m_max[index],
-              min_temp: daily.temperature_2m_min[index],
-              apparent: daily.apparent_temperature_max[index],
-              min_apparent: daily.apparent_temperature_min[index],
-              precipitation: daily.precipitation_probability_max[index],
-              minPrecipitation: daily.precipitation_probability_min[index] ?? '無資料',
-              uv_index: daily.uv_index_max[index],
-              icon: weatherCodeMap[code]?.icon || '',
-              text: weatherCodeMap[code]?.text || '',
+              temp: daily.temperature_2m_max[index], // 最高氣溫
+              min_temp: daily.temperature_2m_min[index], // 最低氣溫
+              apparent: daily.apparent_temperature_max[index], // 最高體溫
+              min_apparent: daily.apparent_temperature_min[index], // 最低氣溫
+              precipitation: daily.precipitation_probability_max[index], // 最高降雨率
+              minPrecipitation: daily.precipitation_probability_min[index] ?? '無資料', // 最低降雨率
+              precipitationSum: daily.precipitation_sum[index], // 總降雨量
+              max_windspeed: daily.windspeed_10m_max[index],  // 最高風速
+              sunrise: moment(daily.sunrise[index]).format('HH:mm'),  // 日出時間
+              sunset: moment(daily.sunset[index]).format('HH:mm'), // 日落時間
+              uv_index: daily.uv_index_max[index], // 最高紫外線指數
+              icon: weatherCodeMap[code]?.icon || '', // 天氣圖示
+              text: weatherCodeMap[code]?.text || '', // 天氣描述
               color: weatherCodeMap[code]?.color || '',
+              tip: weatherCodeMap[code]?.tip,  // 天氣 小提示
             }
           });
 

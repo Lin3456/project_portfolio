@@ -68,6 +68,17 @@ export default {
   },
   mounted() {
     this.modalInstance = new bootstrap.Modal(this.$refs.modal);
+
+    // note: 透過綁定bootstrap的modal事件，避免可能造成的錯誤影響
+    const modalEl = this.$refs.modal;
+
+    modalEl.addEventListener('shown.bs.modal', () => {
+      modalEl.setAttribute('aria-hidden', 'false');
+    });
+
+    modalEl.addEventListener('hidden.bs.modal', () => {
+      modalEl.setAttribute('aria-hidden', 'true');
+    });
   },
   methods: {
     show() {

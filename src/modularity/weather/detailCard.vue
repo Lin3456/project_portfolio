@@ -9,8 +9,9 @@
         <div
           v-for="(item, index) in data"
           :key="`child-card-${index}`"
-          class="card mx-1"
+          class="card mx-1 detail"
           style="min-width: 120px; width: calc(100/ 7);"
+          @click="clickDetail(item)"
         >
           <div class="card-body d-flex flex-column align-items-center">
             <i :class="`weather-icon ${item.icon} mb-1`" :style="{ color: item.color }"></i>
@@ -56,11 +57,18 @@ export default {
     },
     dayFormat(date) {
       return moment(date).format('MM/DD');
+    },
+    clickDetail(data) {
+      this.$emit('onClick', data);
     }
   }
 }
 </script>
 <style scoped>
+.detail {
+  cursor: pointer;
+}
+
 .weather-icon {
   font-size: 6em;
 }

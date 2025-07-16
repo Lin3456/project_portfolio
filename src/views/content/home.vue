@@ -50,7 +50,7 @@
         :key="`card-${index}`"
       >
         <div class="card-body" style="white-space: pre-line;">
-          <h5 class="card-title">{{ `${item.company} (${item.time})` }}</h5>
+          <h5 style="font-size: 22px;">{{ `${item.company} (${item.time})` }}</h5>
           <p style="font-size: 17px;">{{ item.position }}</p>
           <p v-if="item.description" style="margin-left: 8px">{{ item.description }}</p>
 

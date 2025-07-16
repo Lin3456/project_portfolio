@@ -17,7 +17,7 @@
               <!-- 溫度相關資料 -->
               <div class="d-flex flex-column">
                 <span class="h4 mb-1">{{ `${todayWeather.celsius}°C | ${todayWeather.fahrenheit} °F` }}</span>
-                <small class="text-secondary mb-1">{{ `(體感${todayWeather.apparent_temperature}°C | ${todayWeather.apparent_temperature} °F)` }}</small>
+                <small class="text-secondary mb-1">{{ `(體感${todayWeather.apparent_temperature}°C | ${todayWeather.apparent_fahrenheit} °F)` }}</small>
                 <span class="text">{{ `降雨機率: ${todayWeather.precipitation_probability}%` }}</span>
                 <span class="text">{{ `濕度: ${todayWeather.relative_humidity}%` }}</span>
                 <span class="text">{{ `風速: ${todayWeather.wind_speed} 公里/時` }}</span>
@@ -136,7 +136,13 @@
     </div>
 
     <!-- 未來一周天氣(列表) -->
-    <DetailCard v-if="weekWeather.detail" title="未來一周天氣概覽" :data="weekWeather.detail" class="mt-3 mb-2">
+    <DetailCard
+      title="未來一周天氣概覽"
+      class="mt-3 mb-2"
+      v-if="weekWeather.detail"
+      :data="weekWeather.detail"
+      @onClick="openDetail"
+    >
       <template #extra="{ item }">
         <div class="d-flex align-items-center">
           <span>{{ `${item.temp}°C` }}</span>
@@ -145,6 +151,54 @@
       </template>
     </DetailCard>
     <div v-else class="card-body">{{weekWeather.error}}</div>
+
+    <!-- 未來一周天氣(單天 天氣) -->
+    <Modal ref="dayModal" :title="detailData.title">
+      <template #body>
+        <p class="h5">📌 天氣小提醒: {{ detailData.tip }}</p>
+
+        <div class="tab-content pt-3" style="min-height:250px;">
+          <!-- 未來一週天氣摘要表 -->
+          <div class="tab-pane fade show active" id="overView">
+            <table id="dayTable" class="table table-bordered table-hover text-center align-middle">
+              <tbody>
+                <tr>
+                  <th>天氣狀況</th>
+                  <td>
+                    <i :class="detailData.icon" :style="{ color: detailData.color, fontSize: '18px'}"/>
+                    {{`${detailData.text}`}}
+                  </td>
+                </tr>
+                <tr>
+                  <th>氣溫</th>
+                  <td>{{`🌡️ 最高 ${detailData.temp}°C / 最低 ${detailData.min_temp}°C`}}</td>
+                </tr>
+                <tr>
+                  <th>降雨機率</th>
+                  <td>{{`☔ 最高 ${detailData.precipitation}% / 最低 ${detailData.minPrecipitation}%`}}</td>
+                </tr>
+                <tr>
+                  <th>降雨量</th>
+                  <td>{{`💧 ${detailData.precipitationSum} mm`}}</td>
+                </tr>
+                <tr>
+                  <th>紫外線指數</th>
+                  <td>{{`🌞 UV Max ${detailData.uv_index}`}}</td>
+                </tr>
+                <tr>
+                  <th>最高風速</th>
+                  <td>{{`🌬️ ${detailData.max_windspeed} km/h`}}</td>
+                </tr>
+                <tr>
+                  <th>日出/日落</th>
+                  <td>{{`🌄 ${detailData.sunrise} / 🌇 ${detailData.sunset}`}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </template>
+    </Modal>
 
     <Loading v-if="pageLoading" text="天氣資料載入中..."/>
   </div>
@@ -163,6 +217,8 @@ export default {
   data() {
     return {
       weatherStore: useWeatherStore(),
+      weekDetail: {},
+      detailData: {},
     };
   },
   computed: {
@@ -282,9 +338,18 @@ export default {
     dayFormat(date) {
       return moment(date).format('MM/DD');
     },
-    setLocation(city, lat, lon) {
-      this.weatherStore.setLocation(city, lat, lon)
+    async setLocation(city, lat, lon) {
+      this.weatherStore.setLocation(city, lat, lon);
+      
     },
+
+    openDetail(data) {
+      this.detailData = this.weekWeather.detail.filter((item) => item.date === data.date)[0];
+      if (!this.detailData) return alert(`出現意外狀況，無${data.date}的資料`);
+
+      this.detailData.title = `${moment(this.detailData.date).format('MM/DD')} 天氣預報`;
+      this.$refs.dayModal.show();
+    }
   },
 };
 </script>
@@ -297,4 +362,9 @@ export default {
   .text {
     line-height: 1.5;
   }
+
+  #dayTable th {
+    background-color: #f8f9fa;
+  }
+
 </style>
